@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BuildingService } from './services/building.service';
+
+import { UserService } from './services/user.service';
+import { ElevatorService } from './services/elevator.service';
+
+import { User } from './models/user';
+import { Elevator } from './models/elevator';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +14,15 @@ import { BuildingService } from './services/building.service';
 
 export class AppComponent implements OnInit {
   title = 'elevator-system-app';
+  users: User[] = [];
+  elevators: Elevator[] = [];
 
   constructor(
-    private buildingService: BuildingService
+    private userService: UserService,
+    private elevatorService: ElevatorService
   ) {
-    console.log(this.buildingService.getBuilding());
+    this.users = this.userService.getUsers();
+    this.elevators = this.elevatorService.getElevators();
   }
 
   ngOnInit() {

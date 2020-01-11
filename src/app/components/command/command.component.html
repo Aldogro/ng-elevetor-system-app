@@ -1,1 +1,55 @@
-<p>command works!</p>
+<div class="command row">
+    <!-- Floor To -->
+    <div class="form-group col-lg-10 offset-1 text-center">
+        <form [formGroup]="floorForm" (ngSubmit)="onSubmit()"  novalidate class="form form-horizontal form-bordered">
+            <div class="col mb-2">
+                <ng-select [items]="users" bindLabel="fullName" bindValue="id"
+                placeholder="Select the passengers" clearAllText="Clear" [multiple]="true"
+                formControlName="passengers" [notFoundText]="'No results'"></ng-select>
+            </div>
+
+            <hr>
+
+            <div class=" col btn-group btn-group-toggle mb-2" ngbRadioGroup name="elevatorType" formControlName="elevatorType">
+                <label ngbButtonLabel class="btn-primary">
+                  <input ngbButton type="radio" value="Freight"> Freight
+                </label>
+                <label ngbButtonLabel class="btn-primary">
+                  <input ngbButton type="radio" value="Passenger"> Passenger
+                </label>
+            </div>
+            <div class="col" *ngIf="!floorForm.get('elevatorType').value">
+                <ngb-alert [type]="'danger'" [dismissible]="false">Please, select an elevator</ngb-alert>
+            </div>
+            <div class="col" *ngIf="floorForm.get('elevatorType').value === 'Freight'">
+                <ngb-alert [type]="'warning'" [dismissible]="false">You've entered to the <b>{{ floorForm.get('elevatorType').value }}</b> elevator</ngb-alert>
+            </div>
+            <div class="col mb-2" *ngIf="floorForm.get('elevatorType').value === 'Passenger'">
+                <ngb-alert class="mb-0" [type]="'success'" [dismissible]="false">You've entered to the <b>{{ floorForm.get('elevatorType').value }}</b> elevator</ngb-alert>
+                <small>You are going to need a keycard to access Basement or last floor.</small>
+            </div>
+            <hr>
+            <div class="col-md-12">
+                <p class="mb-0">You are in <span *ngIf="currentFloor > 0">floor</span></p>
+                <h4 *ngIf="currentFloor > 0">{{ currentFloor }}</h4>
+                <h4 *ngIf="currentFloor === 0">Lobby</h4>
+                <h4 *ngIf="currentFloor < 0">Basement</h4>
+            </div>
+            <hr>
+            <label class="col-md-12 label-control m-0" for="floor">Go to Floor</label>
+            <div class="col-md-12">
+                <div class="position-relative">
+                    <input type="number" placeholder="Floor" min="-1" max="49" class="form-control" name="floor" formControlName="floor">
+                </div>
+            </div>
+            <div class="form-actions col-md-12 right pt-3">
+                <button type="button" class="btn btn-danger mr-2" (click)="clearInput()">
+                    Clear
+                </button>
+                <button type="submit" class="btn btn-raised btn-success" [disabled]="!floorForm.valid">
+                    Go!
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

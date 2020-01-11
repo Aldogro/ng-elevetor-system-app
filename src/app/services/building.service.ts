@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Building } from '../models/building';
-import { Floor } from '../models/floor';
-import { Elevator } from '../models/elevator';
-import { User } from '../models/user';
 
 import { FloorService } from './floor.service';
 import { ElevatorService } from './elevator.service';

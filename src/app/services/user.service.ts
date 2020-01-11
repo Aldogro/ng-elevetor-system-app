@@ -11,7 +11,8 @@ export class UserService {
         new User({ fullName: 'Tatiana Grimberg', hasKeyCard: true, weight: 50, id: 2 }),
         new User({ fullName: 'Nachito Rojas', hasKeyCard: false, weight: 16, id: 3 }),
         new User({ fullName: 'Maite Rojas', hasKeyCard: false, weight: 12, id: 4 }),
-        new User({ fullName: 'Jabba the Hutt', hasKeyCard: true, weight: 1358, id: 5 })
+        new User({ fullName: 'Jabba the Hutt', hasKeyCard: true, weight: 1358, id: 5 }),
+        new User({ fullName: 'Roland the Apatosaurus', hasKeyCard: false, weight: 16000, id: 6})
     ];
 
     constructor() {}
