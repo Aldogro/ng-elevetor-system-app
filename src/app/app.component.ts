@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
-import { User } from './models/user';
-import { UserService } from './services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { BuildingService } from './services/building.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit {
   title = 'elevator-system-app';
-  users: User[];
 
   constructor(
-    private userService: UserService
+    private buildingService: BuildingService
   ) {
-    this.users = this.userService.getUsers();
-    console.log(this.users);
+    console.log(this.buildingService.getBuilding());
+  }
+
+  ngOnInit() {
   }
 }

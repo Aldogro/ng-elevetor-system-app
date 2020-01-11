@@ -4,10 +4,10 @@ export class User {
     hasKeyCard: boolean;
     weight: number;
 
-    constructor(fullName: string, hasKeyCard: boolean, weight: number, id?: number) {
-        if (id) {this.id = id; }
-        this.fullName = fullName;
-        this.hasKeyCard = hasKeyCard;
-        this.weight = weight;
+    constructor(user: User) {
+        if (user.id) {this.id = user.id; }
+        this.fullName = user.fullName;
+        this.hasKeyCard = user.hasKeyCard;
+        this.weight = user.weight;
     }
 }
