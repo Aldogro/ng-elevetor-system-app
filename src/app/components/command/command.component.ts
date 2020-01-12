@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { User } from 'src/app/models/user';
 import { Elevator } from 'src/app/models/elevator';
+import { Floor } from 'src/app/models/floor';
 
 @Component({
   selector: 'app-command',
@@ -19,16 +20,18 @@ export class CommandComponent implements OnInit, OnChanges {
 
   @Input() users: User[];
   @Input() elevators: Elevator[];
+  @Input() floors: Floor[];
 
   constructor(
     private fb: FormBuilder
   ) {
     this.floorForm = this.fb.group({
-      floor: ['', [Validators.required, Validators.min(-1), Validators.max(49)]],
+      floor: ['', Validators.required],
       elevatorType: ['', Validators.required],
-      passengers: [''],
+      passengers: ['', Validators.required],
       passengersWeight: ['', Validators.max(this.maxWeight)],
-      weightLimit: [false, [Validators.required]]
+      weightLimit: [false, [Validators.required]],
+      keyCardNeeded: [false]
     });
   }
 
@@ -41,10 +44,12 @@ export class CommandComponent implements OnInit, OnChanges {
   getElevatorMaxWeight(event) {
     const selectedElevator = this.elevators.filter( elevator => elevator.type === event.target.value );
     this.maxWeight = selectedElevator[0].maxWeightCapacityLimit;
+    this.keyCardNeeded();
     this.setWeightAlert();
   }
 
-  getPassengersWeight(event) {
+  getPassengersWeight() {
+    this.keyCardNeeded();
     const passengersWeightOnBoard = [];
     let passengersWeight = 0;
     this.floorForm.get('passengers').value.forEach( passenger => {
@@ -64,18 +69,43 @@ export class CommandComponent implements OnInit, OnChanges {
     }
   }
 
-  onSubmit() {
-    const usersOnBoard = [];
+  keyCardNeeded() {
+    // tslint:disable-next-line:max-line-length
+    if ((this.floorForm.value.floor === -1 || this.floorForm.value.floor === this.floors.length - 1) && this.floorForm.value.elevatorType === 'Passenger') {
+      if (this.hasKeyCard(this.passengersOnBoard())) {
+        this.floorForm.get('keyCardNeeded').setValue(false);
+      } else {
+        this.floorForm.get('keyCardNeeded').setValue(true);
+      }
+    } else {
+      this.floorForm.get('keyCardNeeded').setValue(false);
+    }
+  }
+
+  hasKeyCard(passengers) {
+    if ( passengers.filter( passenger => passenger.hasKeyCard).length > 0 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  passengersOnBoard() {
+    const passengersOnBoard = [];
     this.floorForm.value.passengers.forEach( passenger => {
-      usersOnBoard.push(this.users.filter( user => user.id  === passenger ));
+      passengersOnBoard.push(this.users.filter( user => user.id  === passenger )[0]);
     });
+    return passengersOnBoard;
+  }
+
+  onSubmit() {
+    this.passengersOnBoard();
     this.currentFloor = this.floorForm.get('floor').value;
-    this.floorForm.get('floor').reset();
-    console.log(this.floorForm.controls);
+    this.floorForm.reset();
   }
 
   clearInput() {
-    console.log(this.floorForm.value);
+    this.floorForm.reset();
+    this.floorForm.get('keyCardNeeded').setValue(false);
   }
-
 }
