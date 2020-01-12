@@ -1,1 +1,33 @@
-<p>building works!</p>
+<div class="main row">
+    <div class="col text-center">
+        <h4><b>Freight</b></h4>
+        <h5 *ngIf="freightElevatorPosition > 0">On floor {{ freightElevatorPosition }}</h5>
+        <h5 *ngIf="freightElevatorPosition === 0">On Lobby</h5>
+        <h5 *ngIf="freightElevatorPosition < 0">On Basement</h5>
+
+
+        <div *ngFor="let floor of floors.reverse()">
+            <div *ngIf="!floor.isBasement" class="floor mx-auto" [ngClass]="{'bg-warning': !floor.isBasement, 'bg-info': floor.isBasement, 'bg-danger text-white': floor.id === freightElevatorPosition }">
+                {{ floor.id }}
+            </div>
+            <div *ngIf="floor.isBasement" class="floor text-white mx-auto" [ngClass]="{'bg-warning': !floor.isBasement, 'bg-info': floor.isBasement, 'bg-danger text-white': floor.id === freightElevatorPosition }">
+                Basement
+            </div>
+        </div>
+    </div>
+    <div class="col text-center">
+        <h4><b>Passengers</b></h4>
+        <h5 *ngIf="passengerElevatorPosition > 0">On floor {{ passengerElevatorPosition }}</h5>
+        <h5 *ngIf="passengerElevatorPosition === 0">On Lobby</h5>
+        <h5 *ngIf="passengerElevatorPosition < 0">On Basement</h5>
+
+        <div *ngFor="let floor of floors">
+            <div *ngIf="!floor.isBasement" class="floor mx-auto" [ngClass]="{'bg-warning': !floor.isBasement, 'bg-info': floor.isBasement, 'bg-danger text-white': floor.id === passengerElevatorPosition }">
+                {{ floor.id }}
+            </div>
+            <div *ngIf="floor.isBasement" class="floor text-white mx-auto" [ngClass]="{'bg-warning': !floor.isBasement, 'bg-info': floor.isBasement, 'bg-danger text-white': floor.id === passengerElevatorPosition }">
+                Basement
+            </div>
+        </div>
+    </div>
+</div>

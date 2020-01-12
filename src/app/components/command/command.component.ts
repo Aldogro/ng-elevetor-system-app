@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { User } from 'src/app/models/user';
@@ -17,6 +17,7 @@ export class CommandComponent implements OnInit, OnChanges {
   passengersWeight: number;
   maxWeight: number;
   maxWeightAlert: boolean;
+  elevatorStatus: any;
 
   @Input() users: User[];
   @Input() elevators: Elevator[];
@@ -71,7 +72,7 @@ export class CommandComponent implements OnInit, OnChanges {
 
   keyCardNeeded() {
     // tslint:disable-next-line:max-line-length
-    if ((this.floorForm.value.floor === -1 || this.floorForm.value.floor === this.floors.length - 1) && this.floorForm.value.elevatorType === 'Passenger') {
+    if ((this.floorForm.value.floor === -1 || this.floorForm.value.floor === this.floors.length - 2) && this.floorForm.value.elevatorType === 'Passenger') {
       if (this.hasKeyCard(this.passengersOnBoard())) {
         this.floorForm.get('keyCardNeeded').setValue(false);
       } else {
@@ -101,6 +102,7 @@ export class CommandComponent implements OnInit, OnChanges {
   onSubmit() {
     this.passengersOnBoard();
     this.currentFloor = this.floorForm.get('floor').value;
+    this.elevatorStatus = this.floorForm.value;
     this.floorForm.reset();
   }
 

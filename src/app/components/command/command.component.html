@@ -1,5 +1,5 @@
 <div class="command row">
-    <div class="form-group col text-center">
+    <div class="form-group col-7 text-center">
         <form [formGroup]="floorForm" (ngSubmit)="onSubmit()" novalidate class="form form-horizontal form-bordered mt-5">
 
             <ng-container>
@@ -41,11 +41,15 @@
             <hr>
             
             <div class="px-5" *ngIf="!floorForm.get('keyCardNeeded').value">
-                <div class="col-md-12 display">
+                <div class="col-md-12 display bg-info">
                     <p class="mb-0">You are in <span *ngIf="currentFloor > 0">floor</span></p>
                     <h4 *ngIf="currentFloor > 0">{{ currentFloor }}</h4>
                     <h4 *ngIf="currentFloor === 0">Lobby</h4>
                     <h4 *ngIf="currentFloor < 0">Basement</h4>
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-6"></div>
+                    </div>
                 </div>
             </div>
 
@@ -61,7 +65,7 @@
                 <label class="col-md-12 label-control m-0" for="floor">Go to Floor</label>
                 <div class="col-md-12">
                     <div class="position-relative">
-                        <input (change)="keyCardNeeded()" type="number" placeholder="Floor" min="-1" [max]="floors.length -1" class="form-control" name="floor" formControlName="floor">
+                        <input (change)="keyCardNeeded()" type="number" placeholder="Floor" min="-1" [max]="floors.length -2" class="form-control" name="floor" formControlName="floor">
                     </div>
                 </div>
                 <div class="form-actions col-md-12 right pt-3">
@@ -74,5 +78,8 @@
                 </div>
             </ng-container>
         </form>
+    </div>
+    <div class="col-5">
+        <app-building [floors]="floors" [elevatorsStatus]="elevatorStatus"></app-building>
     </div>
 </div>
