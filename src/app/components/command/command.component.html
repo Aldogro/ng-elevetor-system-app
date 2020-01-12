@@ -1,34 +1,41 @@
 <div class="command row">
-    <!-- Floor To -->
     <div class="form-group col-lg-10 offset-1 text-center">
-        <form [formGroup]="floorForm" (ngSubmit)="onSubmit()"  novalidate class="form form-horizontal form-bordered">
-            <div class="col mb-2">
+        <form [formGroup]="floorForm" (ngSubmit)="onSubmit()" novalidate class="form form-horizontal form-bordered mt-3">
+
+            <div class=" col btn-group btn-group-toggle" ngbRadioGroup name="elevatorType" formControlName="elevatorType">
+                <label ngbButtonLabel class="btn-primary">
+                  <input ngbButton type="radio" value="Freight" (click)="getElevatorMaxWeight($event)"> Freight
+                </label>
+                <label ngbButtonLabel class="btn-primary">
+                  <input ngbButton type="radio" value="Passenger" (click)="getElevatorMaxWeight($event)"> Passenger
+                </label>
+            </div>
+            <div class="col font-small" *ngIf="!floorForm.get('elevatorType').value">
+                <ngb-alert [type]="'danger'" [dismissible]="false">Please, select an elevator</ngb-alert>
+            </div>
+            <div class="col font-small" *ngIf="floorForm.get('elevatorType').value === 'Freight'">
+                <ngb-alert [type]="'warning'" [dismissible]="false">You've entered to the <b>{{ floorForm.get('elevatorType').value }}</b> elevator</ngb-alert>
+            </div>
+            <div class="col font-small" *ngIf="floorForm.get('elevatorType').value === 'Passenger'">
+                <ngb-alert class="mb-0" [type]="'success'" [dismissible]="false">You've entered to the <b>{{ floorForm.get('elevatorType').value }}</b> elevator</ngb-alert>
+                <small>You are going to need a keycard to access Basement or last floor.</small>
+            </div>
+
+            <hr>
+
+            <div class="col mb-0" (click)="getPassengersWeight($event)">
                 <ng-select [items]="users" bindLabel="fullName" bindValue="id"
                 placeholder="Select the passengers" clearAllText="Clear" [multiple]="true"
                 formControlName="passengers" [notFoundText]="'No results'"></ng-select>
             </div>
 
+            <div *ngIf="maxWeight" class="col mb-2"> {{ floorForm.get('passengersWeight').value }}Kg / {{ maxWeight }}Kg</div>
+            <div class="col mb-2 font-small" *ngIf="floorForm.get('weightLimit').value">
+                <ngb-alert class="mb-0" [type]="'danger'" [dismissible]="false">Weight limit exceeded</ngb-alert>
+            </div>
+
             <hr>
 
-            <div class=" col btn-group btn-group-toggle mb-2" ngbRadioGroup name="elevatorType" formControlName="elevatorType">
-                <label ngbButtonLabel class="btn-primary">
-                  <input ngbButton type="radio" value="Freight"> Freight
-                </label>
-                <label ngbButtonLabel class="btn-primary">
-                  <input ngbButton type="radio" value="Passenger"> Passenger
-                </label>
-            </div>
-            <div class="col" *ngIf="!floorForm.get('elevatorType').value">
-                <ngb-alert [type]="'danger'" [dismissible]="false">Please, select an elevator</ngb-alert>
-            </div>
-            <div class="col" *ngIf="floorForm.get('elevatorType').value === 'Freight'">
-                <ngb-alert [type]="'warning'" [dismissible]="false">You've entered to the <b>{{ floorForm.get('elevatorType').value }}</b> elevator</ngb-alert>
-            </div>
-            <div class="col mb-2" *ngIf="floorForm.get('elevatorType').value === 'Passenger'">
-                <ngb-alert class="mb-0" [type]="'success'" [dismissible]="false">You've entered to the <b>{{ floorForm.get('elevatorType').value }}</b> elevator</ngb-alert>
-                <small>You are going to need a keycard to access Basement or last floor.</small>
-            </div>
-            <hr>
             <div class="col-md-12">
                 <p class="mb-0">You are in <span *ngIf="currentFloor > 0">floor</span></p>
                 <h4 *ngIf="currentFloor > 0">{{ currentFloor }}</h4>
@@ -46,7 +53,7 @@
                 <button type="button" class="btn btn-danger mr-2" (click)="clearInput()">
                     Clear
                 </button>
-                <button type="submit" class="btn btn-raised btn-success" [disabled]="!floorForm.valid">
+                <button type="submit" class="btn btn-raised btn-success" [disabled]="!floorForm.valid || floorForm.get('weightLimit').value">
                     Go!
                 </button>
             </div>
