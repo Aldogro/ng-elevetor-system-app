@@ -1,3 +1,7 @@
+# Notes by Aldogro
+In order to run this app, go to the root directory of the app, and run the command `npm install`.
+Once you did that, run the app with the follow command `ng serve -o`. This will run the program and open a new tab on your browser in `http://localhost:4200`.
+
 # ElevatorSystemApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.9.
